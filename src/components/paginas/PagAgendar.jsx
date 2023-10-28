@@ -1,4 +1,3 @@
-import React from "react"
 import Tabla from "../tabla"
 import Naver from "./nav.jsx"
 

@@ -11,36 +11,13 @@ export default function Tabla() {
   const [options, setOptions] = useState([]);
   const [CampoTexto, setCampoTexto] = useState("");
 
- // const handleSumbit = async (e) => {
- //   e.preventDefault();
-//
-  //const data1 = {
-  //  Nombre: RNombre,
-  //  Correo: RCorreo,
-  //  NecesitaEquipo: Eleccion,
-  //  TipoEquipo: TipoEquipo,
-  //  HoraInicio: HoraInicio,
-  //  HoraFin: HoraFin,
-  //  Fecha: selectedDate,
-  //  CampoTexto: CampoTexto,
-  //};
-
-    //console.log("Datos enviados:", data1);
-    //Nombre.current.value = "";
-    //Correo.current.value = "";
-    //SiCheckbox.current.checked = false;
-    //NoCheckbox.current.checked = false;
-    //setEleccion("");
-    //setTipoEquipo("");
-    //setHoraInicio("");
-    //setHoraFin("");
-    //setSelectedDate(null);
-    //setCampoTexto("");
+ const handleSumbit = async (e) => {
+   e.preventDefault();
+ }
 
   return (
     <div class="relative flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 via-teal-300 to-blue-300">
-      <form
-        //onSubmit={handleSumbit}
+      <form onSubmit={handleSumbit}
         class="bg-white shadow-md rounded p-4 mt-4 mb-5 w-full md:w-1/2 lg:w-1/3 "
       >
         <div class="text-xl">

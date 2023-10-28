@@ -1,9 +1,8 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
-const AuthContext = createContext({});
+const AuthContext = createContext();
 
 export default AuthContext;
 
@@ -15,22 +14,25 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null
   );
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
 
   const loginUser = async (credentials) => {
     try {
-      const response = await axios.post('https://apiv2-espaciosucm.onrender.com/api/v2/login/', credentials, {
+      const response = await fetch('https://apiv2-espaciosucm.onrender.com/api/v2/login/', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify(credentials)
       });
-
       if (response.status === 200) {
-        const data = response.data;
+        const data = await response.json();
         setAuthTokens(data);
         setUser(jwt_decode(data.access));
         localStorage.setItem('authTokens', JSON.stringify(data));
-        navigate('/user/agendar');
+        navigate('/agendar');
       } else {
         alert('Invalid username or password');
       }
@@ -38,46 +40,38 @@ export const AuthProvider = ({ children }) => {
       console.error('Error during login:', error);
     }
   };
+  
 
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem('authTokens');
-    navigate('/login');
+    navigate('/');
   };
 
   const updateToken = async () => {
     try {
-      if (!authTokens || !authTokens.refresh) {
-        logoutUser(); // Cerrar la sesión si no hay token de actualización
-        return;
-      }
-  
-      const response = await axios.post(
-        'https://apiv2-espaciosucm.onrender.com/api/v2/login/user/refresh-token/',
-        { refresh: authTokens.refresh },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-  
+      const response = await fetch('https://apiv2-espaciosucm.onrender.com/api/v2/login/user/refresh-token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'refresh': authTokens?.refresh })
+      });
+
       if (response.status === 200) {
-        const data = response.data;
+        const data = await response.json();
         setAuthTokens(data);
         setUser(jwt_decode(data.access));
         localStorage.setItem('authTokens', JSON.stringify(data));
       } else {
-        throw new Error('Failed to update token');
+        logoutUser();
       }
-  
       if (loading) {
         setLoading(false);
       }
     } catch (error) {
       console.error('Error updating token:', error);
-      logoutUser(); // Cerrar la sesión en caso de error al actualizar el token
     }
   };
 
@@ -109,6 +103,9 @@ export const AuthProvider = ({ children }) => {
     authTokens,
     loginUser,
     logoutUser,
+    errors,
+    openDialog,
+    setOpenDialog
   };
 
   return (
@@ -117,4 +114,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

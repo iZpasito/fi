@@ -1,42 +1,41 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./components/context/authContext";
 import Agendar from "./components/paginas/PagAgendar";
 import AdmAgendar from "./components/paginas/AdmAgendar";
 import Login from "./components/paginas/login";
-//import PrivateRoute from "./Compos/utils/privateRoute";
+import PrivateRoute from "./components/utils/privateRoute";
 import AdmInformes from "./components/paginas/AdmInformes";
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <Router>
         <AuthProvider>
           <Routes>
           <Route path="/login" element={<Login/>} />
             <Route path="/" element={<Login/>} />
             <Route
-              path="/admin/agendar"
+              path="/admin/agendar" 
               element={
-                //<PrivateRoute>
+                <PrivateRoute>
                   <AdmAgendar />
-                //</PrivateRoute>
+                </PrivateRoute>
               }
             />
             <Route
               path="/admin/informes"
               element={
-                //<PrivateRoute>
+                <PrivateRoute>
                   <AdmInformes />
-                //</PrivateRoute>
+                </PrivateRoute>
               }
             />
             <Route
               path="/user/agendar"
               element={
-                //<PrivateRoute>
+                <PrivateRoute>
                   <Agendar />
-                //</PrivateRoute>
+                </PrivateRoute>
               }
             />
           </Routes>
