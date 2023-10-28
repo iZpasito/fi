@@ -6,7 +6,7 @@ import Navad from "./nav-adm"
 function AdmInformes() {
   
   return (
-      <div class='h-screen min-w-375'>
+      <div className='h-screen min-w-375'>
         <Navad></Navad>
         <Listado></Listado>
       </div>

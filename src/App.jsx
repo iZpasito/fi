@@ -17,25 +17,25 @@ function App() {
             <Route
               path="/admin/agendar" 
               element={
-                <PrivateRoute>
+                //<PrivateRoute roles={"1"}>
                   <AdmAgendar />
-                </PrivateRoute>
+                //</PrivateRoute>
               }
             />
             <Route
               path="/admin/informes"
               element={
-                <PrivateRoute>
+                //<PrivateRoute roles={"1"}>
                   <AdmInformes />
-                </PrivateRoute>
+                //</PrivateRoute>
               }
             />
             <Route
               path="/user/agendar"
               element={
-                <PrivateRoute>
+                //<PrivateRoute>
                   <Agendar />
-                </PrivateRoute>
+                //</PrivateRoute>
               }
             />
           </Routes>
