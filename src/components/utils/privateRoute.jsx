@@ -1,18 +1,13 @@
-import { Navigate, Outlet } from "react-router-dom";
-import AuthContext from "../context/authContext";
-import { useContext } from "react";
+import { Route, Redirect } from 'react-router-dom'
+import { useContext } from 'react'
+import AuthContext from '../context/authContext'
 
-const PrivateRoute = ({ children, roles }) => {
-  const {user} = useContext(AuthContext)  
-  if (!user) {
-      return <Navigate to="/login" />;
-    }
 
-    if (roles && !roles.includes(user.is_staff)) {
-      return <Navigate to="/" />;
-    }
-
-    return children;
-  };
+const PrivateRoute = ({children, ...rest}) => {
+    let {user} = useContext(AuthContext)
+    return(
+        <Route {...rest}>{!user ? <Redirect to="/login" /> :   children}</Route>
+    )
+}
 
 export default PrivateRoute;

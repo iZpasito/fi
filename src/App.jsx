@@ -3,7 +3,7 @@ import { AuthProvider } from "./components/context/authContext";
 import Agendar from "./components/paginas/PagAgendar";
 import AdmAgendar from "./components/paginas/AdmAgendar";
 import Login from "./components/paginas/login";
-import PrivateRoute from "./components/utils/privateRoute";
+//import PrivateRoute from "./components/utils/privateRoute";
 import AdmInformes from "./components/paginas/AdmInformes";
 
 function App() {
