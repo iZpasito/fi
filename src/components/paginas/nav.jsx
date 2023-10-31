@@ -1,11 +1,10 @@
 import {NavLink} from 'react-router-dom';
-import AuthContext from '../context/authContext';
+import {AuthContext} from '../context/authContext';
 import { useContext } from 'react';
 
 export default function Naver(){
 
   const {logoutUser} = useContext(AuthContext);
-
   const handleLogout = () => {
     logoutUser();
   };

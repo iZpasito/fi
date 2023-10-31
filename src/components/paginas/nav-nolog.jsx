@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import AuthContext from "../context/authContext";
+import {AuthContext} from '../context/authContext';
 
 export default function Navno(){
   const {logoutUser} = useContext(AuthContext);

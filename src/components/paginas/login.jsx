@@ -1,12 +1,13 @@
 import { useContext, useState} from 'react';
-import AuthContext from '../context/authContext';
+import {AuthContext} from '../context/authContext';
 
 const Login = () => {
-  const {loginUser } = useContext(AuthContext);
+  const {loginUser} = useContext(AuthContext);
 	const [credentials, setCredentials] = useState({
     username:"",
     password:""
   })
+
 
  const handleChange = (e) =>{
    setCredentials(prev=>({...prev, [e.target.name]: e.target.value}))

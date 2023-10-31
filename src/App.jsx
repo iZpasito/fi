@@ -1,48 +1,71 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./components/context/authContext";
 import Agendar from "./components/paginas/PagAgendar";
 import AdmAgendar from "./components/paginas/AdmAgendar";
 import Login from "./components/paginas/login";
-//import PrivateRoute from "./components/utils/privateRoute";
 import AdmInformes from "./components/paginas/AdmInformes";
+import { useContext } from "react";
+import {AuthContext} from './components/context/authContext';
+import PageError from "./components/paginas/page-error"
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <Router>
-        <AuthProvider>
-          <Routes>
-          <Route path="/login" element={<Login/>} />
-            <Route path="/" element={<Login/>} />
-            <Route
-              path="/admin/agendar" 
-              element={
-                //<PrivateRoute roles={"1"}>
-                  <AdmAgendar />
-                //</PrivateRoute>
-              }
-            />
-            <Route
-              path="/admin/informes"
-              element={
-                //<PrivateRoute roles={"1"}>
-                  <AdmInformes />
-                //</PrivateRoute>
-              }
-            />
-            <Route
-              path="/user/agendar"
-              element={
-                //<PrivateRoute>
-                  <Agendar />
-                //</PrivateRoute>
-              }
-            />
-          </Routes>
-        </AuthProvider>
-      </Router>
-    </div>
-  );
-}
+  const { infoUser } = useContext(AuthContext)
+  const ProtectedRoute = ({ children, roles }) => {
+    if (!infoUser) {
+      return <Navigate to="/login" replace={true} />;
+    }
+
+    if (roles && !roles.includes()) {
+      return <Navigate to="/" replace={true} />;
+    }
+
+    return children;
+  };
+
+  const router = createBrowserRouter([
+    //Rutas protegidas por acceso
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <Agendar/>
+        </ProtectedRoute>
+      ),
+      children: [
+        {
+          path: "/admin/agendar",
+          element: (<ProtectedRoute ><AdmAgendar /></ProtectedRoute>),
+          errorElement: <PageError/>
+        },
+        {
+          path: "/admin/informes",
+          element: (<ProtectedRoute ><AdmInformes/></ProtectedRoute>),
+          errorElement: <PageError/>
+        },
+        {
+          path: "/user/agendar",
+          element: (<ProtectedRoute ><Agendar /></ProtectedRoute>),
+          errorElement: <PageError/>
+        },
+      ]
+    },
+      {
+        path: "/login",
+        element: <Login/>,
+      }
+    ]);
+    return (
+      <div>
+        <RouterProvider router={router} />
+      </div>
+    );
+  }
+
 
 export default App;

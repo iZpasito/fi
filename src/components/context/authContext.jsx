@@ -1,21 +1,15 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
 
+export const AuthContext = createContext({});
 
-const AuthContext = createContext({});
-
-export default AuthContext;
-
-export const AuthProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
   let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
   let [user, setUser] = useState(()=> localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
-  let [userData, setUserData] = useState(null);
+  let [infoUser, setinfoUser] = useState(null);
 
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState({});
-  const [openDialog, setOpenDialog] = useState(false);
-  const navigate = useNavigate();
+  //const [loading, setLoading] = useState(true);
+
 
   const loginUser = async (credentials) => {
       const response = await fetch('https://apiv2-espaciosucm.onrender.com/api/v2/login/', {
@@ -28,44 +22,39 @@ export const AuthProvider = ({ children }) => {
       let data = await response.json();
       if (response.status === 200) {
         setAuthTokens(data);
+        
         setUser(jwt_decode(data.access));
         localStorage.setItem('authTokens', JSON.stringify(data));
-        navigate('/user/agendar');
       } else {
         alert('Invalid username or password');
-        setErrors(data)
       }
   };
 
-
-
-  const dataUser = async () => {
+  const dataUser = async (authTokens) => {
       const response = await fetch('https://apiv2-espaciosucm.onrender.com/api/v2/login/user/details/', {
         method: 'GET',
         headers: {
-          'Accept': '*/*',
           'Content-type': 'application/json',
-          'Authorization': 'Bearer' + String(authTokens.access)
+          'Authorization': `Bearer ${authTokens?.access}`
         }
       });
       let data = await response.json()
       if (response.status === 200) {
-        setUserData(data); // Almacena los datos del usuario en el estado userData
-        console.log('Datos del usuario:', data);
-      } else {
-        alert('Invalid GET');
-        console.log('Respuesta no válida');
+        setinfoUser(data); // Almacena los datos del usuario en el estado userData
+        } else {
+        //alert('Invalid GET');
+        //console.log('Respuesta no válida');
       }
   };
 
-console.log(authTokens);
 
-  let updateToken = async ()=> {
+
+  let updateToken = async (authTokens)=> {
     let response = await fetch('https://apiv2-espaciosucm.onrender.com/api/v2/login/user/refresh-token/', {
         method:'POST',
         headers:{
             'Content-Type':'application/json',
-            'Authorization': 'Bearer ' + String(authTokens?.access)
+            'Authorization': `Bearer ${authTokens?.access}`
         },
         body:JSON.stringify({'refresh':authTokens?.refresh})
     })
@@ -78,51 +67,44 @@ console.log(authTokens);
     }else{
         logoutUser()
     }
-
-    if(loading){
-        setLoading(false)
-    }
-}
-
-
-
-
+};
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
-    setUserData(null)
+    setinfoUser(null);
+    setRol('');
     localStorage.removeItem('authTokens');
     navigate('/login');
   };
 
-  let contextData = {
-    user:user,
-    authTokens:authTokens,
-    loginUser:loginUser,
-    logoutUser:logoutUser,
-    dataUser: dataUser,
-}
+  
+  
+
 useEffect(()=> {
-
-  if(loading){
-      updateToken()
-  }
-
   let fourMinutes = 1000 * 60 * 4
-
-
   let interval =  setInterval(()=> {
       if(authTokens){
-          updateToken()
+          updateToken(authTokens)
       }
   }, fourMinutes)
   return ()=> clearInterval(interval)
+ 
+}, [authTokens])
 
-}, [authTokens, loading])
+dataUser(authTokens)
+
+let contextData = {
+  user: user,
+  authTokens:authTokens,
+  loginUser:loginUser,
+  logoutUser:logoutUser,
+  infoUser: infoUser,
+  dataUser: dataUser,
+}
 
   return (
     <AuthContext.Provider value={contextData}>
-      {loading ? null : children}
+      {children}
     </AuthContext.Provider>
   );
 };
