@@ -47,6 +47,7 @@ export default function Tabla() {
             <select
               className="py-2 px-2 pr-8 block w-full border rounded w-full text-xl focus:outline-none focus:shadow-outline dark:bg-slate-300 dark:text-gray-400"
               label="Seleccione"
+              name="eleccion"
               value={Eleccion}
               onChange={(e) => setEleccion(e.target.value)}
             >
@@ -66,6 +67,7 @@ export default function Tabla() {
               <input
                 type="radio"
                 value="Si" 
+                name="equipo1"
                 //onChange={() => setTipoEquipo("Si")} // Guardar el tipo de equipo como "Si"
               />
               <label className="ml-2">Si</label>
@@ -73,6 +75,7 @@ export default function Tabla() {
                 className='ml-2'
                 type="radio"
                 value="No"
+                name="equipo2"
                 //onChange={() => setTipoEquipo("No")} // Guardar el tipo de equipo como "No"
               />
               <label className="ml-2">No</label>
@@ -83,6 +86,7 @@ export default function Tabla() {
             <input
               type="date"
               value={selectedDate}
+              name="date"
               onChange={(e) => setSelectedDate(e.target.value)}
               min={new Date().toISOString().split("T")[0]}
             />
@@ -92,6 +96,7 @@ export default function Tabla() {
               <select
                 className="py-2 px-2 pr-8 block w-full border rounded w-full text-xl focus:outline-none focus:shadow-outline dark:bg-slate-300 dark:text-gray-400"
                 value={HoraInicio}
+                name="horainicio"
                 onChange={(e) => setHoraInicio(e.target.value)}
               >
                 <option value="">Hora de inicio</option>
@@ -109,6 +114,7 @@ export default function Tabla() {
               <select
                 className="py-2 px-2 pr-8 block w-full border rounded w-full text-xl focus:outline-none focus:shadow-outline dark:bg-slate-300 dark:text-gray-400"
                 value={HoraFin}
+                name="horafin"
                 onChange={(e) => setHoraFin(e.target.value)}
               >
                 <option value="">Hora de fin</option>
@@ -125,6 +131,7 @@ export default function Tabla() {
           </div>
           <textarea
             value={CampoTexto}
+            name="campotexto"
             onChange={(e) => setCampoTexto(e.target.value)}
             placeholder="Ingrese datos adicionales de ser necesario" // Texto de marcador de posición
             className="resize-none w-full h-16 mt-4 p-2 border rounded text-gray-700 focus:outline-none focus:shadow-outline"

@@ -1,29 +1,22 @@
-import { useContext } from "react";
-import { NavLink} from "react-router-dom";
-import AuthContext from "../context/authContext";
+import { Link, NavLink} from "react-router-dom";
 
   
 
 function Navad(){
 
-  const {logoutUser} = useContext(AuthContext);
-
-  const handleLogout = () => {
-    logoutUser();
-  };
 
 return(
 <nav class="sticky top-0 z-10 bg-white border-gray-200 dark:bg-blue-600 min-w-375">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 min-w-375">
-      <a href="#" class="flex items-center">
+      <Link href="#" class="flex items-center">
           <img src="/src/assets/logoucm.png" class="h-32" alt="UCM" />
           <span></span>
           <div class="ml-20 self-center text-2xl font-semibold whitespace-nowrap dark:text-white" ><h1>UCM Sport Reserve</h1></div>
-      </a>
+      </Link>
     <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-xl text-black-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-blue-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
         <span class="sr-only"></span>
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
         </svg>
     </button>
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">
